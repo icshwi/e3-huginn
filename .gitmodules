@@ -1,0 +1,4 @@
+[submodule "huginn"]
+	path = huginn
+	url = https://github.com/icshwi/huginn
+	ignore = all
