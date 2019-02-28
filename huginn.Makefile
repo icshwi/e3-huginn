@@ -49,10 +49,14 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 ##EXCLUDE_ARCHS = linux-ppc64e6500
 
 
-# APP:=calcApp
-# APPDB:=$(APP)/Db
-# APPSRC:=$(APP)/src
+APP:=huginnApp
+APPDB:=$(APP)/Db
+APPPROTO:=$(APP)/protocol
+APPSRC:=$(APP)/src
 
+
+TEMPLATES += $(wildcard $(APPDB)/*.db)
+TEMPLATES += $(wildcard $(APPPROTO)/*.proto*)
 
 # USR_INCLUDES += -I$(where_am_I)$(APPSRC)
 
@@ -85,6 +89,9 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 # HEADERS += $(DBDINC_HDRS)
 
 
+SOURCES += $(wildcard $(APPSRC)/*.c)
+SOURCES += $(wildcard $(APPSRC)/*.st)
+
 # SOURCES += $(APPSRC)/sCalcPostfix.c
 # SOURCES += $(APPSRC)/sCalcPerform.c
 # SOURCES += $(APPSRC)/aCalcPostfix.c
@@ -103,7 +110,8 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 # # DBDINC_SRCS should be last of the series of SOURCES
 # SOURCES += $(DBDINC_SRCS)
 
-# DBDS += $(APPSRC)/calcSupport_LOCAL.dbd
+DBDS += $(APPSRC)/asub_functions.dbd
+DBDS += $(APPSRC)/snl_huginn.dbd
 # DBDS += $(APPSRC)/calcSupport_withSNCSEQ.dbd
 # DBDS += $(APPSRC)/calcSupport_withSSCAN.dbd
 
@@ -191,25 +199,25 @@ db:
 # USR_DBFLAGS += -I $(EPICS_BASE)/db
 # USR_DBFLAGS += -I $(APPDB)
 #
-# SUBS=$(wildcard $(APPDB)/*.substitutions)
-# TMPS=$(wildcard $(APPDB)/*.template)
+SUBS=$(wildcard $(APPDB)/*.substitutions)
+TMPS=$(wildcard $(APPDB)/*.template)
 #
-# db: $(SUBS) $(TMPS)
+db: $(SUBS) $(TMPS)
 
-# $(SUBS):
-#	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
-#	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
-#	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db -S $@  > $(basename $(@)).db.d
-#	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db -S $@
+$(SUBS):
+	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
+	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
+	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db -S $@  > $(basename $(@)).db.d
+	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db -S $@
 
-# $(TMPS):
-#	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
-#	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
-#	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db $@  > $(basename $(@)).db.d
-#	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db $@
+$(TMPS):
+	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
+	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
+	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db $@  > $(basename $(@)).db.d
+	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db $@
 
 #
-# .PHONY: db $(SUBS) $(TMPS)
+.PHONY: db $(SUBS) $(TMPS)
 
 vlibs:
 
@@ -222,6 +230,4 @@ vlibs:
 # 	$(QUIET)$(SUDO) install -m 555 $@ $(E3_MODULES_VENDOR_LIBS_LOCATION)/
 
 # .PHONY: $(VENDOR_LIBS) vlibs
-
-
 
