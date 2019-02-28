@@ -39,9 +39,9 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 #asyn_VERSION=$(ASYN_DEP_VERSION)
 #endif
 
-#ifneq ($(strip $(SEQUENCER_DEP_VERSION)),)
-#sequencer_VERSION=$(SEQUENCER_DEP_VERSION)
-#endif
+ifneq ($(strip $(SEQUENCER_DEP_VERSION)),)
+sequencer_VERSION=$(SEQUENCER_DEP_VERSION)
+endif
 
 
 
