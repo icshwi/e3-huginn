@@ -13,3 +13,4 @@ core.*
 *_old/
 *PVs.list
 *-loc/*.Makefile
+hunginn/*.Makefile
